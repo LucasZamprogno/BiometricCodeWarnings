@@ -240,11 +240,7 @@ public class ITrace extends AbstractUIPlugin implements EventHandler {
    		if(event.getTopic() == "iTrace/newgaze"){
    			String[] propertyNames = event.getPropertyNames();
    			Gaze g = (Gaze)event.getProperty(propertyNames[0]);
-   			//Fetching the directory location//
-   			String tmp = g.getEventID();
-   			String eventID = tmp.substring(tmp.length() - 10);
-			String tmp_dir = tmp + "/" + "eclipse_" + eventID + ".xml";
-			dirLocation = tmp_dir;
+			dirLocation = "tmp";
    			xmlSolver.config(dirLocation); //Configures the directory location for the xml file
    			//******************************//
    			// This entire function needs to be re-written. This works for now, but is one of the main reasons of inefficiency while working with 

@@ -1,6 +1,9 @@
 package edu.ysu.itrace.gaze.handlers;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
@@ -23,11 +26,21 @@ import edu.ysu.itrace.gaze.IStyledTextGazeResponse;
  */
 public class StyledTextGazeHandler implements IGazeHandler {
     private StyledText targetStyledText;
+    PrintWriter writer;
 
     /**
      * Constructs a new gaze handler for the target StyledText object
      */
     public StyledTextGazeHandler(Object target) {
+    	try {
+        	this.writer = new PrintWriter("eyetrace-log.txt", "UTF-8");
+    	} catch (UnsupportedEncodingException e) {
+    		System.err.println(e);
+    		System.exit(1);
+    	} catch (FileNotFoundException e) {
+    		System.err.println(e);
+    		System.exit(1);
+    	}
         this.targetStyledText = (StyledText) target;
     }
 
@@ -64,6 +77,11 @@ public class StyledTextGazeHandler implements IGazeHandler {
             }
             col = offset - lineOffset;
             lineIndex = projectionViewer.widgetLine2ModelLine(foldedLineIndex);
+            try {
+                writer.println(System.currentTimeMillis() + "-" + lineIndex);    
+            	System.out.println(System.currentTimeMillis() + "-" + lineIndex);        	
+            } catch (Exception e) {
+            }
             
             // (0, 0) relative to the control in absolute screen
             // coordinates.
