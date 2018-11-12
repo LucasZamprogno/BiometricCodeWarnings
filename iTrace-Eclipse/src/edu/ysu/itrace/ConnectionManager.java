@@ -15,7 +15,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 public class ConnectionManager {
 	
-	private Socket socket;
+	private WebSocketClient mWs;
 	private BufferedReader reader;
 	private Timer timer;
 	private IEventBroker eventBroker;
@@ -32,7 +32,7 @@ public class ConnectionManager {
 		timer = new Timer();
 		eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		try{
-			WebSocketClient mWs = new WebSocketClient( new URI( "ws://localhost:8008" ), new Draft_6455() )
+			mWs = new WebSocketClient( new URI( "ws://localhost:8008" ), new Draft_6455() )
 			{
                 @Override
                 public void onMessage( String message ) {
@@ -114,7 +114,7 @@ public class ConnectionManager {
 	
 	void endSocketConnection() {
 		try {
-			socket.close();
+			mWs.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
