@@ -11,7 +11,7 @@ def main():
 	gaze_df = pd.DataFrame(flatten_and_make_window(files))
 	biometric_df = make_biometric_df('vitals.csv')
 	gaze_df = gaze_df.join(biometric_df.set_index('timestamp'), on='timestamp')
-	gaze_df.to_csv('rawdata.csv')
+	gaze_df.to_csv('rawdata.csv', index=False)
 
 def parseXML(xmlFileName):
 	tree = ET.parse(xmlFileName)
