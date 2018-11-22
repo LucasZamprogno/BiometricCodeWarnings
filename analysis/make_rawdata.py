@@ -6,12 +6,12 @@ import numpy as np
 
 
 
-def main():
-	files = parseXML('tmp.xml')
+def main(folder):
+	files = parseXML(folder + '/tmp.xml')
 	gaze_df = pd.DataFrame(flatten_and_make_window(files))
-	biometric_df = make_biometric_df('vitals.csv')
-	gaze_df = gaze_df.join(biometric_df.set_index('timestamp'), on='timestamp')
-	gaze_df.to_csv('rawdata.csv', index=False)
+	biometric_df = make_biometric_df(folder + '/vitals.csv')
+	gaze_df = pd.merge(gaze_df, biometric_df, on='timestamp')
+	gaze_df.to_csv(folder + '/rawdata.csv', index=False)
 
 def parseXML(xmlFileName):
 	tree = ET.parse(xmlFileName)
@@ -39,9 +39,9 @@ def flatten_and_make_window(fileDict, window_size=1):
 	for filename, file in fileDict.items():
 		for event in file['events']:
 			for i in range(window_size):
-				if(event['line'] - i > 0):
+				if(event['line'] - (i+1) > 0):
 					result.append({'file': filename, 'line': event['line'] - (i+1), 'timestamp_ms': event['timestamp'], 'timestamp': event['timestamp']//1000})
-				if(event['line'] + i <= file['numlines']):
+				if(event['line'] + (i+1) <= file['numlines']):
 					result.append({'file': filename, 'line': event['line'] + (i+1), 'timestamp_ms': event['timestamp'], 'timestamp': event['timestamp']//1000})
 
 			result.append({'file': filename, 'line': event['line'], 'timestamp_ms': event['timestamp'], 'timestamp': event['timestamp']//1000})
@@ -49,7 +49,7 @@ def flatten_and_make_window(fileDict, window_size=1):
 	return result
 
 def make_biometric_df(filename):
-	df = pd.read_csv('vitals.csv')
+	df = pd.read_csv(filename)
 	df['heart_rate'] = pd.Series([x if y >= 50 else np.nan for [x,y] in np.array(df[['heart_rate', 'hr_quality']])])
 	df['heart_rate_variability'] = pd.Series([x if y >= 50 else np.nan for [x,y] in np.array(df[['heart_rate_variability', 'hrv_quality']])])
 
@@ -65,6 +65,3 @@ def make_biometric_df(filename):
 	scaled_df['timestamp'] = df['timestamp']
 
 	return scaled_df
-
-if __name__ == '__main__':
-	main()

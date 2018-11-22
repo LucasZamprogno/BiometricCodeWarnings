@@ -1,6 +1,0 @@
-PaintCanvas
-  69
-PaintWindow
-  123-126
-PenicPaint
-  31-34

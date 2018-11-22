@@ -1,6 +1,0 @@
-PaintCanvas
-  38-42
-  46-53
-  91-92
-PaintWindow
-  46-141 (moreso 55-56, 67-68)

@@ -32,6 +32,7 @@ class FeatureExtractor:
         return df[['heart_rate', 'heart_rate_variability', 'gsr', 'skin_temperature', 'duration']]
         
     
-    def extract_targets(self):
+    def extract_info(self):
         df = self.make_df()
         return df[['file', 'line']]
+
